@@ -274,6 +274,7 @@ export class Visualiser {
                     spect = transposeFlipUD(calcSpect(self.sig, subSegs, self.fft, self.fftComplexArray, self.window));
                     renderStatus.spect = spect;
                     renderStatus.state = stateCalculated;
+
                     return spect;
                 }
                 else if (renderStatus.state !== stateDisplayed) {
@@ -471,6 +472,15 @@ export class Visualiser {
         self.populateChannelOptions();
     }
 
+    /**
+     *
+     * @param func callback for each chunk after it is rendered
+     */
+    setRenderingHook(func) {
+        const self = this;
+        self.renderingHook = func;
+    }
+
     populateChannelOptions() {
         const self = this;
         let nChannels = self.dataArrays.length;
@@ -514,7 +524,7 @@ export class Visualiser {
          * And then incrementally add frames to it
          */
         self.imgWidth = Math.floor((self.length - self.nfft) / self.frameSize) + 1;
-        self.imgHeight = self.nfft / 2;
+        self.imgHeight = self.nfft / 2 + 1;
 
         self.spectrogramSvg = d3.select(self.spectrogramId);
         self.spectrogramSvg.selectAll('*').remove();

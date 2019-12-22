@@ -4,6 +4,7 @@ import traceback
 from json import JSONEncoder
 
 import dj_database_url
+import numpy
 
 from maintenance import get_config
 
@@ -199,6 +200,8 @@ def JSONEncoder_newdefault(self, obj):
         return obj.strftime(TIME_INPUT_FORMAT)
     elif isinstance(obj, datetime.date):
         return obj.strftime(DATE_INPUT_FORMAT)
+    elif isinstance(obj, numpy.ndarray):
+        return obj.tolist()
     return JSONEncoder_olddefault(self, obj)
 
 
